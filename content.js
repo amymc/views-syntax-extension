@@ -15,7 +15,7 @@
       const table = document.querySelectorAll(
         '.repository-content .file tbody'
       )[0]
-      applySyntax(table)
+      applyFileSyntax(table)
     }
   }
 
@@ -34,34 +34,56 @@
 
     const rows = Array.from(table.children)
     rows.forEach(row => {
+      if (
+        !row.children[index] ||
+        /\bempty-cell\b/.test(row.children[index].className)
+      )
+        return
       if (/^(\+)?(\-)?[A-Z]/.test(row.innerText.trim())) {
         // debugger
         let lines = row.children[index].innerHTML.split(
           '<span class="blob-code-inner">'
         )
-        //debugger
-        let lineSubstrings = lines[1].trim().split(' ')
+        // debugger
+        if (lines[1]) {
+          let lineSubstrings = lines[1].trim().split(' ')
 
-        lineSubstrings[0] = `<span style="color:#ff8300;">${
-          lineSubstrings[0]
-        }</span>`
-        lines[1] = lineSubstrings.join(' ')
-        row.children[index].innerHTML = lines.join(
-          '<span class="blob-code-inner">'
-        )
+          lineSubstrings[0] = `<span style="color:#ff8300;">${
+            lineSubstrings[0]
+          }</span>`
+          lines[1] = lineSubstrings.join(' ')
+          row.children[index].innerHTML = lines.join(
+            '<span class="blob-code-inner">'
+          )
+        }
       } else if (/^#.+$/.test(row.innerText.trim())) {
         // comments
         row.children[index].style.color = '#7DB1B9B3'
       } else if (row.innerText.includes('onWhen')) {
         // debugger
-        if (row.children[index].children[1]) {
-          row.children[index].children[1].style.color = '#A2E1F9'
-        }
+        //row.children[index].style.color = '#A2E1F9'
+        row.children[index].children[1].style.color = '#A2E1F9'
+      } else {
+        applyCommonSyntax(row, index)
       }
     })
   }
 
-  const applySyntax = table => {
+  const applyCommonSyntax = (row, index) => {
+    // comments
+    //debugger
+    // if (/^(\+)?(\-)?#.+$/.test(row.innerText.trim())) {
+    //   row.children[index].style.color = '#7DB1B9B3'
+    //   // } else if (row.innerText.includes('onWhen')) {
+    //   //   // debugger
+    //   //   row.children[index].children[1].style.color = '#A2E1F9'
+    // } else
+    if (row.innerText.includes('when')) {
+      row.children[index].style.color = '#00AEEF'
+    }
+  }
+
+  const applyFileSyntax = table => {
     console.log('applying syntax')
 
     const rows = Array.from(table.children)
@@ -70,7 +92,7 @@
       return
 
     rows.forEach(row => {
-      debugger
+      // debugger
       let substrings = row.children[1].innerHTML.split(' ')
 
       if (/^[A-Z]/.test(row.innerText)) {
@@ -81,8 +103,8 @@
         row.children[1].style.color = '#7DB1B9B3'
       } else if (row.innerText.includes('onWhen')) {
         row.children[1].style.color = '#A2E1F9'
-      } else if (row.innerText.includes('when')) {
-        row.children[1].style.color = '#00AEEF'
+        // } else if (row.innerText.includes('when')) {
+        //   row.children[1].style.color = '#00AEEF'
       } else if (row.innerText.includes('<')) {
         // slots
         substrings[1] = `<span style="color:#00AEEF;">${substrings[1]}</span>`
@@ -94,6 +116,8 @@
         for (i = 1; i < substrings.length; i++) {
           substrings[i] = `<span style="color:#1FCC69;">${substrings[i]}</span>`
         }
+      } else {
+        applyCommonSyntax(row, 1)
       }
       row.children[1].innerHTML = substrings.join(' ')
     })
