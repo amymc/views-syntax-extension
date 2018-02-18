@@ -14,27 +14,33 @@
         console.log(header, ' is view file')
         console.log('heyyyy', header.nextElementSibling)
         const table = header.nextElementSibling.querySelectorAll('tbody')[0]
-        applyPRSyntax(table)
+        checkLayout(table)
       }
     })
-    // if (isView) {
-    //   const table = document.querySelectorAll(
-    //     '.repository-content .file tbody'
-    //   )[0]
-    //   applySyntax(table)
-    // }
+    if (isView) {
+      const table = document.querySelectorAll(
+        '.repository-content .file tbody'
+      )[0]
+      applySyntax(table)
+    }
   }
 
-  const applyPRSyntax = table => {
-    // debugger
+  const checkLayout = table => {
+    if (/diff=split$/.test(location.href)) {
+      applyPRSyntax(1, table)
+      applyPRSyntax(3, table)
+    } else {
+      applyPRSyntax(2, table)
+    }
+  }
+
+  const applyPRSyntax = (index, table) => {
     // what if there are pluses or minuses at the begining of the line?
-    // need to run the conditions on children[1] and children[3]
-    // unified layout!
+
     const rows = Array.from(table.children)
     rows.forEach(row => {
-      // debugger
-      if (/^[A-Z]/.test(row.innerText.trim())) {
-        let lines = row.children[1].innerHTML.split(
+      if (/^(\+)?(\-)?[A-Z]/.test(row.innerText.trim())) {
+        let lines = row.children[index].innerHTML.split(
           '<span class="blob-code-inner">'
         )
         let lineSubstrings = lines[1].trim().split(' ')
@@ -43,25 +49,20 @@
           lineSubstrings[0]
         }</span>`
         lines[1] = lineSubstrings.join(' ')
-        row.children[1].innerHTML = lines.join('<span class="blob-code-inner">')
+        row.children[index].innerHTML = lines.join(
+          '<span class="blob-code-inner">'
+        )
       } else if (/^#.+$/.test(row.innerText.trim())) {
         // comments
-        row.children[1].style.color = '#7DB1B9B3'
+        row.children[index].style.color = '#7DB1B9B3'
       } else if (row.innerText.includes('onWhen')) {
         // debugger
-        if (row.children[1].children[1]) {
-          row.children[1].children[1].style.color = '#A2E1F9'
+        if (row.children[index].children[1]) {
+          row.children[index].children[1].style.color = '#A2E1F9'
         }
-        // else {
-        //   row.children[3].children[1].style.color = '#A2E1F9'
-        // }
       }
     })
   }
-
-  // loop through .file-header and check data-path for '.view'
-  // if its a match find the next '.js-file-content table'
-  // applySyntax() on it
 
   const applySyntax = table => {
     console.log('applying syntax')
