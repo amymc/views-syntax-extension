@@ -1,23 +1,17 @@
 ;(global => {
-  const checkFile = () => {
-    const fileName = document
-      .querySelectorAll('.repository-content a')[0]
-      .getAttribute('href')
+  const checkPage = () => {
+    // pr diff page
+    if (/diff/.test(location.href)) {
+      const headers = Array.from(document.querySelectorAll('.file-header'))
 
-    const re = new RegExp('.view$')
-    const isView = re.exec(fileName)
-
-    const headers = Array.from(document.querySelectorAll('.file-header'))
-
-    headers.forEach(header => {
-      if (/\.view$/.test(header.getAttribute('data-path'))) {
-        console.log(header, ' is view file')
-        console.log('heyyyy', header.nextElementSibling)
-        const table = header.nextElementSibling.querySelectorAll('tbody')[0]
-        checkLayout(table)
-      }
-    })
-    if (isView) {
+      headers.forEach(header => {
+        if (/\.view$/.test(header.getAttribute('data-path'))) {
+          const table = header.nextElementSibling.querySelectorAll('tbody')[0]
+          checkLayout(table)
+        }
+      })
+      // regular file page
+    } else if (/\.view$/.test(location.href)) {
       const table = document.querySelectorAll(
         '.repository-content .file tbody'
       )[0]
@@ -25,6 +19,7 @@
     }
   }
 
+  // check if it's split or unified
   const checkLayout = table => {
     if (/diff=split$/.test(location.href)) {
       applyPRSyntax(1, table)
@@ -40,12 +35,14 @@
     const rows = Array.from(table.children)
     rows.forEach(row => {
       if (/^(\+)?(\-)?[A-Z]/.test(row.innerText.trim())) {
+        // debugger
         let lines = row.children[index].innerHTML.split(
           '<span class="blob-code-inner">'
         )
+        //debugger
         let lineSubstrings = lines[1].trim().split(' ')
 
-        lineSubstrings[0] = `<span style="color:#ff8300;"> ${
+        lineSubstrings[0] = `<span style="color:#ff8300;">${
           lineSubstrings[0]
         }</span>`
         lines[1] = lineSubstrings.join(' ')
@@ -102,5 +99,5 @@
     })
   }
 
-  checkFile()
+  checkPage()
 })()
