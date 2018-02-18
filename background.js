@@ -1,13 +1,6 @@
-// chrome.browserAction.onClicked.addListener(function(tab) {
-//   // No tabs or host permissions needed!
-//   debugger
-//   console.log('Turning ' + tab.url + ' red!')
-//   chrome.tabs.executeScript({
-//     code: 'document.body.style.backgroundColor="red"',
-//   })
-// })
+// Force the content script to be run everytime we navigate to a new page
+// https://stackoverflow.com/a/21071357
+chrome.webNavigation.onHistoryStateUpdated.addListener(function(details) {
+  chrome.tabs.executeScript(null, { file: 'content.js' })
+})
 
-// "background": {
-//   "scripts": ["background.js"],
-//   "persistent": false
-// },

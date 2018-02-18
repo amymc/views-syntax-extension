@@ -9,14 +9,15 @@
   "browser_action": {
     "default_icon": "icon.png"
   },
-  "permissions": ["*://*.github.com/*"],
+  "permissions": ["*://*.github.com/*", "tabs", "webNavigation"],
+  "background": {
+    "scripts": ["background.js"],
+    "persistent": false
+  },
   "content_scripts": [
     {
       "matches": ["*://*.github.com/*"],
-      "run_at": "document_idle",
-      "js": ["views-syntax.js"]
+      "js": ["content.js"]
     }
-  ],
-  "content_security_policy":
-    "script-src 'self' 'unsafe-eval'; object-src 'self'"
+  ]
 }
