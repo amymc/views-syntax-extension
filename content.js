@@ -19,15 +19,16 @@
     }
   }
 
-  // check if it's split or unified
+  // check if it's unified or split(default)
   const checkLayout = table => {
-    if (/diff=split$/.test(location.href)) {
+    if (/diff=unified$/.test(location.href)) {
+      applyPRSyntax(2, table)
+    } else {
       applyPRSyntax(1, table)
       applyPRSyntax(3, table)
-    } else {
-      applyPRSyntax(2, table)
     }
   }
+
 
   const applyPRSyntax = (index, table) => {
     // what if there are pluses or minuses at the begining of the line?
