@@ -1,7 +1,7 @@
 ;(global => {
   const checkPage = () => {
     // pr diff page
-    if (/diff/.test(location.href)) {
+    if (/pull/.test(location.href)) {
       const headers = Array.from(document.querySelectorAll('.file-header'))
 
       headers.forEach(header => {
@@ -29,7 +29,6 @@
     }
   }
 
-
   const applyPRSyntax = (index, table) => {
     // what if there are pluses or minuses at the begining of the line?
 
@@ -40,6 +39,7 @@
         /\bempty-cell\b/.test(row.children[index].className)
       )
         return
+
       if (/^(\+)?(\-)?[A-Z]/.test(row.innerText.trim())) {
         // debugger
         let lines = row.children[index].innerHTML.split(
@@ -61,9 +61,35 @@
         // comments
         row.children[index].style.color = '#7DB1B9B3'
       } else if (row.innerText.includes('onWhen')) {
-        // debugger
+        debugger
+
+        //const substrings = [row.innerText.slice(0, 1), row.innerText.slice(1)]
+
         //row.children[index].style.color = '#A2E1F9'
-        row.children[index].children[1].style.color = '#A2E1F9'
+        // trim the row because the first character is always
+        // either '+', '-' or a blank space
+        const trimmedStr = row.innerText.match(/[a-z](.+)/)
+
+        // now split it because the before and after columns are one row 😬
+        const columns = trimmedStr[0].split(/\s\s\s/)
+        // trimmedStr[0] = `<span style="color:#A2E1F90;">${trimmedStr[0]}</span>`
+        row.children[index].innerHTML = row.children[index].innerHTML
+          .replace(
+            columns[0],
+            `<span style="color:#A2E1F9;">${columns[0]}</span>`
+          )
+          .replace(
+            columns[1],
+            `<span style="color:#A2E1F9;">${columns[1]}</span>`
+          )
+
+        //row.children[index].children[1].style.color = '#A2E1F9'
+      } else if (/^[a-z]/.test(row.innerText.trim())) {
+        // strings
+        // debugger
+        // for (i = 1; i < substrings.length; i++) {
+        //   substrings[i] = `<span style="color:#1FCC69;">${substrings[i]}</span>`
+        // }
       } else {
         applyCommonSyntax(row, index)
       }
