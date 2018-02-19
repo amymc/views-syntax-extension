@@ -61,11 +61,7 @@
         // comments
         row.children[index].style.color = '#7DB1B9B3'
       } else if (row.innerText.includes('onWhen')) {
-        debugger
-
-        //const substrings = [row.innerText.slice(0, 1), row.innerText.slice(1)]
-
-        //row.children[index].style.color = '#A2E1F9'
+        // TODO: move this
         // trim the row because the first character is always
         // either '+', '-' or a blank space
         const trimmedStr = row.innerText.match(/[a-z](.+)/)
