@@ -85,7 +85,7 @@
           //     '<span class="blob-code-inner">'
           //   )
           //   //}
-        } else if (/^(?:\+?\-?)#.+$/.test(column)) {
+        } else if (/^(\+)?(\-)?#.+$/.test(column)) {
           //debugger
           //(?:)
 
@@ -106,12 +106,25 @@
             `<span style="color:#A2E1F9;">${column}</span>`
           )
           //row.children[index].children[1].style.color = '#A2E1F9'
-        } else if (/^[a-z]/.test(column)) {
+        } else if (column.includes('&lt;')) {
+          // slots
+          //#00AEEF;
+          debugger
+
+          row.innerHTML = row.innerHTML.replace(
+            column.match(/&lt;([a-z][a-zA-Z0-9]*)?/)[0],
+            `<span style="color:#00AEEF;">${
+              column.match(/&lt;([a-z][a-zA-Z0-9]*)?/)[0]
+            }</span>`
+          )
+        } else if (/^(\+)?(\-)?[a-z]/.test(column)) {
           // strings
           // debugger
-          // for (i = 1; i < substrings.length; i++) {
-          //   substrings[i] = `<span style="color:#1FCC69;">${substrings[i]}</span>`
-          // }
+
+          row.innerHTML = row.innerHTML.replace(
+            column.split(' ')[1],
+            `<span style="color:#1FCC69;">${column.split(' ')[1]}</span>`
+          )
         } else {
           applyCommonSyntax(row, index)
         }
