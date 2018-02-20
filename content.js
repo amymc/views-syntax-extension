@@ -32,11 +32,14 @@
   const parseRow = row => {
     // trim the row because the first character is always
     // either '+', '-' or a blank space
-    debugger;
+    //debugger
     const trimmedStr = row.innerText.match(/([a-z]|[A-Z])(.+)/)
+    if (!trimmedStr) return
 
     // now split it because the before and after columns are one row 😬
-    return trimmedStr[0].split(/\s\s\s/)
+    const rawColumns = trimmedStr[0].split(/\s\s\s/)
+    const columns = rawColumns.map(column => column.replace('<', '&lt;'))
+    return columns
   }
 
   const applyPRSyntax = (index, table) => {
@@ -50,62 +53,68 @@
       )
         return
 
-      if (/^(\+)?(\-)?[A-Z]/.test(row.innerText.trim())) {
-        // debugger
-        const columns = parseRow(row)
+      const columns = parseRow(row)
+      if (!columns) return
 
-        row.children[index].innerHTML = row.children[index].innerHTML
-          .replace(
-            columns[0],
-            `<span style="color:#ff8300;">${columns[0]}</span>`
-          )
-          .replace(
-            columns[1],
-            `<span style="color:#ff8300;">${columns[1]}</span>`
-          )
+      columns.forEach(column => {
+        if (/^(\+)?(\-)?[A-Z]/.test(column /*row.innerText.trim()*/)) {
+          // debugger
+          // const columns = parseRow(row)
 
-        // let lines = row.children[index].innerHTML.split(
-        //   '<span class="blob-code-inner">'
-        // )
-        // // debugger
-        // if (lines[1]) {
-        //   let lineSubstrings = lines[1].trim().split(' ')
-
-        //   lineSubstrings[0] = `<span style="color:#ff8300;">${
-        //     lineSubstrings[0]
-        //   }</span>`
-        //   lines[1] = lineSubstrings.join(' ')
-        //   row.children[index].innerHTML = lines.join(
-        //     '<span class="blob-code-inner">'
-        //   )
-        //}
-      } else if (/^#.+$/.test(row.innerText.trim())) {
-        // comments
-        row.children[index].style.color = '#7DB1B9B3'
-      } else if (row.innerText.includes('onWhen')) {
-        // TODO: move this
-        const columns = parseRow(row)
-        // trimmedStr[0] = `<span style="color:#A2E1F90;">${trimmedStr[0]}</span>`
-        row.children[index].innerHTML = row.children[index].innerHTML
-          .replace(
-            columns[0],
-            `<span style="color:#A2E1F9;">${columns[0]}</span>`
+          row.children[index].innerHTML = row.children[index].innerHTML.replace(
+            columns,
+            `<span style="color:#ff8300;">${columns}</span>`
           )
-          .replace(
-            columns[1],
-            `<span style="color:#A2E1F9;">${columns[1]}</span>`
+          // .replace(
+          //   columns[1],
+          //   `<span style="color:#ff8300;">${columns[1]}</span>`
+          // )
+
+          // let lines = row.children[index].innerHTML.split(
+          //   '<span class="blob-code-inner">'
+          // )
+          // // debugger
+          // if (lines[1]) {
+          //   let lineSubstrings = lines[1].trim().split(' ')
+
+          //   lineSubstrings[0] = `<span style="color:#ff8300;">${
+          //     lineSubstrings[0]
+          //   }</span>`
+          //   lines[1] = lineSubstrings.join(' ')
+          //   row.children[index].innerHTML = lines.join(
+          //     '<span class="blob-code-inner">'
+          //   )
+          //   //}
+        } else if (/^(\+)?(\-)?#.+$/.test(column)) {
+          // debugger
+
+          row.innerHTML = row.innerHTML.replace(
+            column,
+            `<span style="color:#7DB1B9B3;">${column}</span>`
           )
 
-        //row.children[index].children[1].style.color = '#A2E1F9'
-      } else if (/^[a-z]/.test(row.innerText.trim())) {
-        // strings
-        // debugger
-        // for (i = 1; i < substrings.length; i++) {
-        //   substrings[i] = `<span style="color:#1FCC69;">${substrings[i]}</span>`
-        // }
-      } else {
-        applyCommonSyntax(row, index)
-      }
+          //   // comments
+          //   //row.children[index].children[1].style.color = '#7DB1B9B3'
+        } else if (column.includes('onWhen')) {
+          // TODO: move this
+          debugger
+          // const columns = parseRow(row)
+          // trimmedStr[0] = `<span style="color:#A2E1F90;">${trimmedStr[0]}</span>`
+          row.children[index].innerHTML = row.children[index].innerHTML.replace(
+            column,
+            `<span style="color:#A2E1F9;">${column}</span>`
+          )
+          //row.children[index].children[1].style.color = '#A2E1F9'
+        } else if (/^[a-z]/.test(column)) {
+          // strings
+          // debugger
+          // for (i = 1; i < substrings.length; i++) {
+          //   substrings[i] = `<span style="color:#1FCC69;">${substrings[i]}</span>`
+          // }
+        } else {
+          applyCommonSyntax(row, index)
+        }
+      })
     })
   }
 
