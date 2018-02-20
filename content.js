@@ -29,6 +29,16 @@
     }
   }
 
+  const parseRow = row => {
+    // trim the row because the first character is always
+    // either '+', '-' or a blank space
+    debugger;
+    const trimmedStr = row.innerText.match(/([a-z]|[A-Z])(.+)/)
+
+    // now split it because the before and after columns are one row 😬
+    return trimmedStr[0].split(/\s\s\s/)
+  }
+
   const applyPRSyntax = (index, table) => {
     // what if there are pluses or minuses at the begining of the line?
 
@@ -42,32 +52,39 @@
 
       if (/^(\+)?(\-)?[A-Z]/.test(row.innerText.trim())) {
         // debugger
-        let lines = row.children[index].innerHTML.split(
-          '<span class="blob-code-inner">'
-        )
-        // debugger
-        if (lines[1]) {
-          let lineSubstrings = lines[1].trim().split(' ')
+        const columns = parseRow(row)
 
-          lineSubstrings[0] = `<span style="color:#ff8300;">${
-            lineSubstrings[0]
-          }</span>`
-          lines[1] = lineSubstrings.join(' ')
-          row.children[index].innerHTML = lines.join(
-            '<span class="blob-code-inner">'
+        row.children[index].innerHTML = row.children[index].innerHTML
+          .replace(
+            columns[0],
+            `<span style="color:#ff8300;">${columns[0]}</span>`
           )
-        }
+          .replace(
+            columns[1],
+            `<span style="color:#ff8300;">${columns[1]}</span>`
+          )
+
+        // let lines = row.children[index].innerHTML.split(
+        //   '<span class="blob-code-inner">'
+        // )
+        // // debugger
+        // if (lines[1]) {
+        //   let lineSubstrings = lines[1].trim().split(' ')
+
+        //   lineSubstrings[0] = `<span style="color:#ff8300;">${
+        //     lineSubstrings[0]
+        //   }</span>`
+        //   lines[1] = lineSubstrings.join(' ')
+        //   row.children[index].innerHTML = lines.join(
+        //     '<span class="blob-code-inner">'
+        //   )
+        //}
       } else if (/^#.+$/.test(row.innerText.trim())) {
         // comments
         row.children[index].style.color = '#7DB1B9B3'
       } else if (row.innerText.includes('onWhen')) {
         // TODO: move this
-        // trim the row because the first character is always
-        // either '+', '-' or a blank space
-        const trimmedStr = row.innerText.match(/[a-z](.+)/)
-
-        // now split it because the before and after columns are one row 😬
-        const columns = trimmedStr[0].split(/\s\s\s/)
+        const columns = parseRow(row)
         // trimmedStr[0] = `<span style="color:#A2E1F90;">${trimmedStr[0]}</span>`
         row.children[index].innerHTML = row.children[index].innerHTML
           .replace(
