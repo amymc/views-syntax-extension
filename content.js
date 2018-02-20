@@ -85,19 +85,20 @@
           //     '<span class="blob-code-inner">'
           //   )
           //   //}
-        } else if (/^(\+)?(\-)?#.+$/.test(column)) {
-          // debugger
+        } else if (/^(?:\+?\-?)#.+$/.test(column)) {
+          //debugger
+          //(?:)
 
           row.innerHTML = row.innerHTML.replace(
-            column,
-            `<span style="color:#7DB1B9B3;">${column}</span>`
+            column.match(/#.+$/),
+            `<span style="color:#7DB1B9B3;">${column.match(/#.+$/)}</span>`
           )
 
-          //   // comments
+          //  comments
           //   //row.children[index].children[1].style.color = '#7DB1B9B3'
         } else if (column.includes('onWhen')) {
           // TODO: move this
-          debugger
+          //debugger
           // const columns = parseRow(row)
           // trimmedStr[0] = `<span style="color:#A2E1F90;">${trimmedStr[0]}</span>`
           row.children[index].innerHTML = row.children[index].innerHTML.replace(
