@@ -61,6 +61,19 @@
           // debugger
           // const columns = parseRow(row)
 
+//           =======
+//       if (/^(\+)?(\-)?[A-Z]/.test(row.innerText.trim())) {
+//         // debugger
+//         const columns = parseRow(row)
+//         const titles = columns.map(column => column.match(/[A-Z]([a-zA-Z]+)/))
+
+//         titles.forEach(title => 
+//           row.children[index].innerHTML = row.children[index].innerHTML
+//           .replace(
+//             title[0],
+//             `<span style="color:#ff8300;">${title[0]}</span>`
+// >>>>>>> Stashed changes
+
           row.children[index].innerHTML = row.children[index].innerHTML.replace(
             columns,
             `<span style="color:#ff8300;">${columns}</span>`
@@ -93,6 +106,18 @@
             column.match(/#.+$/),
             `<span style="color:#7DB1B9B3;">${column.match(/#.+$/)}</span>`
           )
+
+        debugger
+
+        // row.children[index].innerHTML = row.children[index].innerHTML
+        //   .replace(
+        //     titles[0][0],
+        //     `<span style="color:#ff8300;">${titles[0][0]}</span>`
+        //   )
+        //   .replace(
+        //     titles[1][0],
+        //     `<span style="color:#ff8300;">${titles[1][0]}</span>`
+        //   )
 
           //  comments
           //   //row.children[index].children[1].style.color = '#7DB1B9B3'
