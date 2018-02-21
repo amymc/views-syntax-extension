@@ -58,25 +58,30 @@
 
       columns.forEach(column => {
         if (/^(\+)?(\-)?[A-Z]/.test(column /*row.innerText.trim()*/)) {
-          // debugger
+          debugger
           // const columns = parseRow(row)
 
-//           =======
-//       if (/^(\+)?(\-)?[A-Z]/.test(row.innerText.trim())) {
-//         // debugger
-//         const columns = parseRow(row)
-//         const titles = columns.map(column => column.match(/[A-Z]([a-zA-Z]+)/))
+          // looking for words starting with a capital letter,
+          // followed by either a blank space or line end
+          // otherwise it was matching on the file name in the anchor tag 😬
+          const title = column.match(/[A-Z]([a-zA-Z]+(\s|$))/)[0]
 
-//         titles.forEach(title => 
-//           row.children[index].innerHTML = row.children[index].innerHTML
-//           .replace(
-//             title[0],
-//             `<span style="color:#ff8300;">${title[0]}</span>`
-// >>>>>>> Stashed changes
+          //           =======
+          //       if (/^(\+)?(\-)?[A-Z]/.test(row.innerText.trim())) {
+          //         // debugger
+          //         const columns = parseRow(row)
+          //         const titles = columns.map(column => column.match(/[A-Z]([a-zA-Z]+)/))
+
+          //         titles.forEach(title =>
+          //           row.children[index].innerHTML = row.children[index].innerHTML
+          //           .replace(
+          //             title[0],
+          //             `<span style="color:#ff8300;">${title[0]}</span>`
+          // >>>>>>> Stashed changes
 
           row.children[index].innerHTML = row.children[index].innerHTML.replace(
-            columns,
-            `<span style="color:#ff8300;">${columns}</span>`
+            title,
+            `<span style="color:#ff8300;">${title}</span>`
           )
           // .replace(
           //   columns[1],
@@ -107,17 +112,17 @@
             `<span style="color:#7DB1B9B3;">${column.match(/#.+$/)}</span>`
           )
 
-        debugger
+          debugger
 
-        // row.children[index].innerHTML = row.children[index].innerHTML
-        //   .replace(
-        //     titles[0][0],
-        //     `<span style="color:#ff8300;">${titles[0][0]}</span>`
-        //   )
-        //   .replace(
-        //     titles[1][0],
-        //     `<span style="color:#ff8300;">${titles[1][0]}</span>`
-        //   )
+          // row.children[index].innerHTML = row.children[index].innerHTML
+          //   .replace(
+          //     titles[0][0],
+          //     `<span style="color:#ff8300;">${titles[0][0]}</span>`
+          //   )
+          //   .replace(
+          //     titles[1][0],
+          //     `<span style="color:#ff8300;">${titles[1][0]}</span>`
+          //   )
 
           //  comments
           //   //row.children[index].children[1].style.color = '#7DB1B9B3'
