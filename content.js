@@ -154,11 +154,11 @@
           )
 
           if (lines[1]) {
-            let lineSubstrings = lines[1].trim().split(' ')
+            let lineSubstrings = lines[1].split(/\s([a-z][a-zA-Z0-9]*)/)
 
-            for (i = 1; i < lineSubstrings.length; i++) {
+            for (i = 2; i < lineSubstrings.length; i++) {
               lineSubstrings[i] = `<span style="color:#1FCC69;">${
-                lineSubstrings[i]
+                lineSubstrings[i].split(/\r|\n/)[0]
               }</span>`
             }
 
