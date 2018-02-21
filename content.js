@@ -156,9 +156,15 @@
           if (lines[1]) {
             let lineSubstrings = lines[1].trim().split(' ')
 
-            lineSubstrings[1] = `<span style="color:#1FCC69;">${
-              lineSubstrings[1]
-            }</span>`
+            for (i = 1; i < lineSubstrings.length; i++) {
+              lineSubstrings[i] = `<span style="color:#1FCC69;">${
+                lineSubstrings[i]
+              }</span>`
+            }
+
+            // lineSubstrings[1] = `<span style="color:#1FCC69;">${
+            //   lineSubstrings[1]
+            // }</span>`
             lines[1] = lineSubstrings.join(' ')
             row.children[index].innerHTML = lines.join(
               '<span class="blob-code-inner">'
