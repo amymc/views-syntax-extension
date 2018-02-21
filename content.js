@@ -58,7 +58,6 @@
 
       columns.forEach(column => {
         if (/^(\+)?(\-)?[A-Z]/.test(column /*row.innerText.trim()*/)) {
-          debugger
           // const columns = parseRow(row)
 
           // looking for words starting with a capital letter,
@@ -149,18 +148,37 @@
           )
         } else if (/^(\+)?(\-)?[a-z]/.test(column)) {
           // strings
-          // debugger
-
-          row.innerHTML = row.innerHTML.replace(
-            column.split(' ')[1],
-            `<span style="color:#1FCC69;">${column.split(' ')[1]}</span>`
+          debugger
+          let lines = row.children[index].innerHTML.split(
+            '<span class="blob-code-inner">'
           )
+
+          if (lines[1]) {
+            let lineSubstrings = lines[1].trim().split(' ')
+
+            lineSubstrings[1] = `<span style="color:#1FCC69;">${
+              lineSubstrings[1]
+            }</span>`
+            lines[1] = lineSubstrings.join(' ')
+            row.children[index].innerHTML = lines.join(
+              '<span class="blob-code-inner">'
+            )
+          }
+
+          // row.children[index].innerHTML = row.children[index].innerHTML.replace(
+          //   column.split(' ')[1],
+          //   `<span style="color:#1FCC69;">${column.split(' ')[1]}</span>`
+          // )
         } else {
           applyCommonSyntax(row, index)
         }
       })
     })
   }
+
+  // row.children[index].innerHTML.split('<span class="blob-code-inner">')[1]
+  // find blob
+  // split the code after that on
 
   const applyCommonSyntax = (row, index) => {
     // comments
