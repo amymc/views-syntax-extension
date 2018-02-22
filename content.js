@@ -103,15 +103,14 @@
           //   )
           //   //}
         } else if (/^(\+)?(\-)?#.+$/.test(column)) {
-          //debugger
-          //(?:)
+          //comments
 
           row.innerHTML = row.innerHTML.replace(
             column.match(/#.+$/),
             `<span style="color:#7DB1B9B3;">${column.match(/#.+$/)}</span>`
           )
 
-          debugger
+         // debugger
 
           // row.children[index].innerHTML = row.children[index].innerHTML
           //   .replace(
@@ -138,7 +137,7 @@
         } else if (column.includes('&lt;')) {
           // slots
           //#00AEEF;
-          debugger
+          // debugger
 
           row.innerHTML = row.innerHTML.replace(
             column.match(/&lt;([a-z][a-zA-Z0-9]*)?/)[0],
@@ -152,9 +151,31 @@
           let lines = row.children[index].innerHTML.split(
             '<span class="blob-code-inner">'
           )
+          let lineSubstrings
 
-          if (lines[1]) {
-            let lineSubstrings = lines[1].split(/\s([a-z][a-zA-Z0-9]*)/)
+          if (lines[1] && lines[1].match(/^[\+|\-]/)) {
+            lineSubstrings = lines[1].split(/\s([a-zA-Z0-9]*$)/)
+           //  let lineSubstrings = lines[1].split(/[^\s]+\s(.*|\s*|\n*|\r*)/)
+            debugger
+
+            lineSubstrings[0] = `<span style="color:#1FCC69;">${
+                lineSubstrings[0].split(/\r|\n/)[0]
+              }</span>`
+
+            lines[1] = lineSubstrings.join(' ')
+            row.children[index].innerHTML = lines.join(
+              '<span class="blob-code-inner">'
+            )
+
+            // for (i = 2; i < lineSubstrings.length; i++) {
+            //   lineSubstrings[i] = `<span style="color:#1FCC69;">${
+            //     lineSubstrings[i].split(/\r|\n/)[0]
+            //   }</span>`
+            // }
+          } else if (lines[1]) {
+            lineSubstrings = lines[1].split(/\s([a-z][a-zA-Z0-9]*)/)
+           //  let lineSubstrings = lines[1].split(/[^\s]+\s(.*|\s*|\n*|\r*)/)
+            //debugger
 
             for (i = 2; i < lineSubstrings.length; i++) {
               lineSubstrings[i] = `<span style="color:#1FCC69;">${
